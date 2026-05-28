@@ -1,0 +1,149 @@
+:root {
+  color-scheme: dark;
+  font-family: Inter, system-ui, sans-serif;
+  background:
+    radial-gradient(circle at top, #2563eb 0, #0f172a 42%, #020617 100%);
+  color: #e2e8f0;
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+  background:
+    radial-gradient(circle at top, #dbeafe 0, #f8fafc 45%, #e2e8f0 100%);
+  color: #0f172a;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+.page {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+}
+
+.panel {
+  width: min(760px, 100%);
+  border-radius: 28px;
+  padding: 28px;
+  background: color-mix(in srgb, Canvas 78%, transparent);
+  border: 1px solid color-mix(in srgb, currentColor 16%, transparent);
+  backdrop-filter: blur(18px);
+  box-shadow: 0 30px 80px rgba(2, 6, 23, 0.28);
+}
+
+.hero {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: flex-start;
+  margin-bottom: 20px;
+}
+
+.eyebrow {
+  margin: 0 0 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-size: 0.75rem;
+  opacity: 0.7;
+}
+
+h1 {
+  margin: 0;
+  font-size: clamp(2rem, 5vw, 3.25rem);
+}
+
+.subtitle {
+  margin: 10px 0 0;
+  max-width: 44ch;
+  opacity: 0.8;
+}
+
+.theme-toggle,
+.composer button,
+.item button {
+  border: 0;
+  border-radius: 14px;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.theme-toggle {
+  padding: 12px 16px;
+  background: color-mix(in srgb, currentColor 12%, transparent);
+  color: inherit;
+}
+
+.composer {
+  display: flex;
+  gap: 12px;
+  margin: 20px 0 14px;
+}
+
+.composer input {
+  flex: 1;
+  padding: 14px 16px;
+  border-radius: 14px;
+  border: 1px solid color-mix(in srgb, currentColor 18%, transparent);
+  background: color-mix(in srgb, Canvas 88%, transparent);
+  color: inherit;
+}
+
+.composer button {
+  padding: 14px 18px;
+  background: #38bdf8;
+  color: #082f49;
+}
+
+.meta {
+  margin-bottom: 12px;
+  opacity: 0.7;
+  font-size: 0.95rem;
+}
+
+.list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 12px;
+}
+
+.item,
+.empty {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+  padding: 16px;
+  border-radius: 18px;
+  background: color-mix(in srgb, Canvas 82%, transparent);
+  border: 1px solid color-mix(in srgb, currentColor 12%, transparent);
+}
+
+.item button {
+  padding: 10px 14px;
+  background: #fb7185;
+  color: #881337;
+}
+
+@media (max-width: 640px) {
+  .hero,
+  .composer,
+  .item {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
