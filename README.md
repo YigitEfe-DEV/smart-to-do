@@ -1,4 +1,4 @@
-# AI Test App
+# Task Manager
 
 A modern React to-do app built with Vite.
 

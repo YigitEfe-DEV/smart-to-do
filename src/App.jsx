@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 
-const STORAGE_KEY = 'ai-test-app-tasks';
-const THEME_KEY = 'ai-test-app-theme';
+const STORAGE_KEY = 'task-manager-tasks';
+const THEME_KEY = 'task-manager-theme';
 
 function readStoredTasks() {
   try {
@@ -56,7 +56,7 @@ export default function App() {
         <div className="hero">
           <div>
             <p className="eyebrow">Developer setup</p>
-            <h1>AI Test App</h1>
+            <h1>Task Manager</h1>
             <p className="subtitle">
               Modern, responsive, localStorage-backed task manager.
             </p>
