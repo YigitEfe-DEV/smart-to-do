@@ -1,12 +1,16 @@
-# Task Manager
+# LumaFlow
 
-A modern React to-do app built with Vite.
+A polished React workspace for capturing and clearing tasks with speed.
+
+## Overview
+
+LumaFlow is a lightweight task app with a calm visual style, local persistence, and a responsive layout that works on desktop and mobile.
 
 ## Features
 
-- Add tasks
-- Delete tasks
-- Save tasks in `localStorage`
+- Quick task capture
+- Remove tasks instantly
+- Persist data in `localStorage`
 - Light and dark theme support
 - Responsive layout
 
@@ -25,4 +29,9 @@ npm run build
 
 ## Usage
 
-Type a task into the input, press **Add**, and manage items with **Delete**.
+Type a task into the input, press **Add task**, and manage items with **Remove**.
+
+## Notes
+
+- Your tasks stay in the browser via `localStorage`.
+- The theme preference is also remembered automatically.

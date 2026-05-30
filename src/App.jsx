@@ -55,14 +55,14 @@ export default function App() {
       <section className="panel">
         <div className="hero">
           <div>
-            <p className="eyebrow">Developer setup</p>
-            <h1>Task Manager</h1>
+            <p className="eyebrow">Personal workflow</p>
+            <h1>LumaFlow</h1>
             <p className="subtitle">
-              Modern, responsive, localStorage-backed task manager.
+              A focused task workspace with a clean, adaptive interface.
             </p>
           </div>
           <button className="theme-toggle" type="button" onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}>
-            {theme === 'dark' ? 'Light mode' : 'Dark mode'}
+            {theme === 'dark' ? 'Switch to light' : 'Switch to dark'}
           </button>
         </div>
 
@@ -70,23 +70,23 @@ export default function App() {
           <input
             value={taskText}
             onChange={(e) => setTaskText(e.target.value)}
-            placeholder="Add a new task"
+            placeholder="Capture a new task"
             aria-label="New task"
           />
-          <button type="submit">Add</button>
+          <button type="submit">Add task</button>
         </form>
 
         <div className="meta">{remaining} tasks</div>
 
         <ul className="list">
           {tasks.length === 0 ? (
-            <li className="empty">No tasks yet.</li>
+            <li className="empty">Your workspace is clear.</li>
           ) : (
             tasks.map((task) => (
               <li key={task.id} className="item">
                 <span>{task.text}</span>
                 <button type="button" onClick={() => deleteTask(task.id)}>
-                  Delete
+                  Remove
                 </button>
               </li>
             ))
