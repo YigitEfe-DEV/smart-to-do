@@ -14,6 +14,16 @@ LumaFlow is a lightweight task app with a calm visual style, local persistence, 
 - Light and dark theme support
 - Responsive layout
 
+## Updates
+
+- v1.1.0
+  - Added task editing
+  - Added filters for All, Active, and Completed
+  - Added search
+  - Added task statistics
+  - Added delete confirmation
+  - Added loading animation
+
 ## Setup
 
 ```bash
