@@ -1,20 +1,13 @@
 import { useEffect, useMemo, useState } from 'react';
-
-const STORAGE_KEY = 'task-manager-tasks';
-const THEME_KEY = 'task-manager-theme';
-const VERSION = '1.1.0';
+import { APP_VERSION, STORAGE_KEYS, DEFAULT_THEME } from './constants/app.js';
+import { readJSON, readString, writeJSON, writeString } from './utils/storage.js';
 
 function readStoredTasks() {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    return raw ? JSON.parse(raw) : [];
-  } catch {
-    return [];
-  }
+  return readJSON(STORAGE_KEYS.tasks, []);
 }
 
 function readStoredTheme() {
-  return localStorage.getItem(THEME_KEY) || 'dark';
+  return readString(STORAGE_KEYS.theme, DEFAULT_THEME);
 }
 
 export default function App() {
@@ -28,11 +21,11 @@ export default function App() {
   const [theme, setTheme] = useState(readStoredTheme);
 
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
+    writeJSON(STORAGE_KEYS.tasks, tasks);
   }, [tasks]);
 
   useEffect(() => {
-    localStorage.setItem(THEME_KEY, theme);
+    writeString(STORAGE_KEYS.theme, theme);
     document.documentElement.dataset.theme = theme;
   }, [theme]);
 
@@ -247,7 +240,7 @@ export default function App() {
           )}
         </ul>
         <footer className="footer">
-          <span>Version {VERSION}</span>
+          <span>Version {APP_VERSION}</span>
         </footer>
       </section>
     </main>
