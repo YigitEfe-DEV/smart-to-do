@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { APP_VERSION, STORAGE_KEYS, DEFAULT_THEME } from './constants/app.js';
 import { readJSON, readString, writeJSON, writeString } from './utils/storage.js';
+import { useTasks } from './hooks/useTasks.js';
 
 function readStoredTasks() {
   return readJSON(STORAGE_KEYS.tasks, []);
@@ -11,7 +12,7 @@ function readStoredTheme() {
 }
 
 export default function App() {
-  const [tasks, setTasks] = useState(readStoredTasks);
+  const { tasks, addTask: addTaskRaw, editTaskText, toggleTask, deleteTask } = useTasks();
   const [taskText, setTaskText] = useState('');
   const [editText, setEditText] = useState('');
   const [editingId, setEditingId] = useState(null);
@@ -19,10 +20,6 @@ export default function App() {
   const [search, setSearch] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [theme, setTheme] = useState(readStoredTheme);
-
-  useEffect(() => {
-    writeJSON(STORAGE_KEYS.tasks, tasks);
-  }, [tasks]);
 
   useEffect(() => {
     writeString(STORAGE_KEYS.theme, theme);
@@ -61,13 +58,9 @@ export default function App() {
 
   const addTask = (event) => {
     event.preventDefault();
-    const text = taskText.trim();
-    if (!text) return;
-    setTasks((current) => [
-      { id: crypto.randomUUID(), text, completed: false },
-      ...current,
-    ]);
-    setTaskText('');
+    if (addTaskRaw(taskText)) {
+      setTaskText('');
+    }
   };
 
   const startEdit = (task) => {
@@ -82,31 +75,22 @@ export default function App() {
 
   const saveEdit = (event) => {
     event.preventDefault();
-    const text = editText.trim();
-    if (!text) return;
-    setTasks((current) =>
-      current.map((task) =>
-        task.id === editingId ? { ...task, text } : task,
-      ),
-    );
-    cancelEdit();
+    if (editTaskText(editingId, editText)) {
+      cancelEdit();
+    }
   };
 
-  const deleteTask = (id) => {
+  const requestDeleteTask = (id) => {
     const task = tasks.find((item) => item.id === id);
     const confirmed = window.confirm(
       `Remove "${task?.text ?? 'this task'}"?`,
     );
     if (!confirmed) return;
-    setTasks((current) => current.filter((item) => item.id !== id));
+    deleteTask(id);
   };
 
   const toggleCompleted = (id) => {
-    setTasks((current) =>
-      current.map((task) =>
-        task.id === id ? { ...task, completed: !task.completed } : task,
-      ),
-    );
+    toggleTask(id);
   };
 
   return (
@@ -230,7 +214,7 @@ export default function App() {
                     <button type="button" onClick={() => startEdit(task)}>
                       Edit
                     </button>
-                    <button type="button" onClick={() => deleteTask(task.id)}>
+                    <button type="button" onClick={() => requestDeleteTask(task.id)}>
                       Remove
                     </button>
                   </div>
