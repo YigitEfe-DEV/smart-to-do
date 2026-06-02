@@ -1,30 +1,17 @@
 import { useEffect, useMemo, useState } from 'react';
-import { APP_VERSION, STORAGE_KEYS, DEFAULT_THEME } from './constants/app.js';
-import { readJSON, readString, writeJSON, writeString } from './utils/storage.js';
+import { APP_VERSION } from './constants/app.js';
 import { useTasks } from './hooks/useTasks.js';
-
-function readStoredTasks() {
-  return readJSON(STORAGE_KEYS.tasks, []);
-}
-
-function readStoredTheme() {
-  return readString(STORAGE_KEYS.theme, DEFAULT_THEME);
-}
+import { useTheme } from './hooks/useTheme.js';
 
 export default function App() {
   const { tasks, addTask: addTaskRaw, editTaskText, toggleTask, deleteTask } = useTasks();
+  const { theme, toggleTheme } = useTheme();
   const [taskText, setTaskText] = useState('');
   const [editText, setEditText] = useState('');
   const [editingId, setEditingId] = useState(null);
   const [filter, setFilter] = useState('all');
   const [search, setSearch] = useState('');
   const [isLoading, setIsLoading] = useState(true);
-  const [theme, setTheme] = useState(readStoredTheme);
-
-  useEffect(() => {
-    writeString(STORAGE_KEYS.theme, theme);
-    document.documentElement.dataset.theme = theme;
-  }, [theme]);
 
   useEffect(() => {
     const timer = window.setTimeout(() => setIsLoading(false), 900);
@@ -112,7 +99,7 @@ export default function App() {
               A focused task workspace with a clean, adaptive interface.
             </p>
           </div>
-          <button className="theme-toggle" type="button" onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}>
+          <button className="theme-toggle" type="button" onClick={toggleTheme}>
             {theme === 'dark' ? 'Switch to light' : 'Switch to dark'}
           </button>
         </div>
