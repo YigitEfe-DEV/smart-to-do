@@ -2,11 +2,11 @@ import { useEffect, useMemo, useState } from 'react';
 import { APP_VERSION } from './constants/app.js';
 import { useTasks } from './hooks/useTasks.js';
 import { useTheme } from './hooks/useTheme.js';
+import Composer from './components/Composer.jsx';
 
 export default function App() {
-  const { tasks, addTask: addTaskRaw, editTaskText, toggleTask, deleteTask } = useTasks();
+  const { tasks, addTask, editTaskText, toggleTask, deleteTask } = useTasks();
   const { theme, toggleTheme } = useTheme();
-  const [taskText, setTaskText] = useState('');
   const [editText, setEditText] = useState('');
   const [editingId, setEditingId] = useState(null);
   const [filter, setFilter] = useState('all');
@@ -43,12 +43,7 @@ export default function App() {
     };
   }, [tasks]);
 
-  const addTask = (event) => {
-    event.preventDefault();
-    if (addTaskRaw(taskText)) {
-      setTaskText('');
-    }
-  };
+  const addTaskHandler = (text) => addTask(text);
 
   const startEdit = (task) => {
     setEditingId(task.id);
@@ -119,17 +114,7 @@ export default function App() {
           </article>
         </div>
 
-        <form className="composer" onSubmit={addTask}>
-          <input
-            value={taskText}
-            onChange={(e) => setTaskText(e.target.value)}
-            placeholder="Capture a new task"
-            aria-label="New task"
-          />
-          <button type="submit" disabled={!taskText.trim()}>
-            Add task
-          </button>
-        </form>
+        <Composer onAdd={addTaskHandler} />
 
         <div className="toolbar">
           <input
