@@ -3,6 +3,8 @@ import { APP_VERSION } from './constants/app.js';
 import { useTasks } from './hooks/useTasks.js';
 import { useTheme } from './hooks/useTheme.js';
 import Composer from './components/Composer.jsx';
+import StatsGrid from './components/StatsGrid.jsx';
+import { computeStats } from './utils/tasks.js';
 
 export default function App() {
   const { tasks, addTask, editTaskText, toggleTask, deleteTask } = useTasks();
@@ -33,15 +35,7 @@ export default function App() {
     });
   }, [tasks, filter, normalizedSearch]);
 
-  const stats = useMemo(() => {
-    const completed = tasks.filter((task) => task.completed).length;
-    const pending = tasks.length - completed;
-    return {
-      total: tasks.length,
-      completed,
-      pending,
-    };
-  }, [tasks]);
+  const stats = useMemo(() => computeStats(tasks), [tasks]);
 
   const addTaskHandler = (text) => addTask(text);
 
@@ -99,20 +93,7 @@ export default function App() {
           </button>
         </div>
 
-        <div className="stats-grid" aria-label="Task statistics">
-          <article className="stat-card">
-            <span>Total tasks</span>
-            <strong>{stats.total}</strong>
-          </article>
-          <article className="stat-card">
-            <span>Completed</span>
-            <strong>{stats.completed}</strong>
-          </article>
-          <article className="stat-card">
-            <span>Pending</span>
-            <strong>{stats.pending}</strong>
-          </article>
-        </div>
+        <StatsGrid stats={stats} />
 
         <Composer onAdd={addTaskHandler} />
 
