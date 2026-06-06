@@ -4,6 +4,7 @@ import { useTasks } from './hooks/useTasks.js';
 import { useTheme } from './hooks/useTheme.js';
 import Composer from './components/Composer.jsx';
 import StatsGrid from './components/StatsGrid.jsx';
+import Hero from './components/Hero.jsx';
 import { computeStats } from './utils/tasks.js';
 
 export default function App() {
@@ -80,18 +81,7 @@ export default function App() {
             </div>
           </div>
         )}
-        <div className="hero">
-          <div>
-            <p className="eyebrow">Personal workflow</p>
-            <h1>LumaFlow</h1>
-            <p className="subtitle">
-              A focused task workspace with a clean, adaptive interface.
-            </p>
-          </div>
-          <button className="theme-toggle" type="button" onClick={toggleTheme}>
-            {theme === 'dark' ? 'Switch to light' : 'Switch to dark'}
-          </button>
-        </div>
+        <Hero theme={theme} onToggleTheme={toggleTheme} />
 
         <StatsGrid stats={stats} />
 
