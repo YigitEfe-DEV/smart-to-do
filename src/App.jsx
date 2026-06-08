@@ -6,12 +6,12 @@ import Composer from './components/Composer.jsx';
 import StatsGrid from './components/StatsGrid.jsx';
 import Hero from './components/Hero.jsx';
 import Toolbar from './components/Toolbar.jsx';
+import TaskItem from './components/TaskItem.jsx';
 import { computeStats, filterTasks, sortTasks } from './utils/tasks.js';
 
 export default function App() {
   const { tasks, addTask, editTaskText, toggleTask, deleteTask } = useTasks();
   const { theme, toggleTheme } = useTheme();
-  const [editText, setEditText] = useState('');
   const [editingId, setEditingId] = useState(null);
   const [filter, setFilter] = useState(FILTERS.all);
   const [search, setSearch] = useState('');
@@ -36,17 +36,14 @@ export default function App() {
 
   const startEdit = (task) => {
     setEditingId(task.id);
-    setEditText(task.text);
   };
 
   const cancelEdit = () => {
     setEditingId(null);
-    setEditText('');
   };
 
-  const saveEdit = (event) => {
-    event.preventDefault();
-    if (editTaskText(editingId, editText)) {
+  const saveEdit = (id, text) => {
+    if (editTaskText(id, text)) {
       cancelEdit();
     }
   };
@@ -96,53 +93,18 @@ export default function App() {
           {filteredTasks.length === 0 ? (
             <li className="empty">Your workspace is clear.</li>
           ) : (
-            filteredTasks.map((task) =>
-              editingId === task.id ? (
-                <li key={task.id} className="item editing">
-                  <form className="edit-form" onSubmit={saveEdit}>
-                    <input
-                      value={editText}
-                      onChange={(e) => setEditText(e.target.value)}
-                      autoFocus
-                      aria-label="Edit task"
-                    />
-                    <div className="item-actions">
-                      <button type="submit" disabled={!editText.trim()}>
-                        Save
-                      </button>
-                      <button type="button" onClick={cancelEdit}>
-                        Cancel
-                      </button>
-                    </div>
-                  </form>
-                </li>
-              ) : (
-                <li
-                  key={task.id}
-                  className={task.completed ? 'item completed' : 'item'}
-                >
-                  <button
-                    type="button"
-                    className="check"
-                    onClick={() => toggleCompleted(task.id)}
-                    aria-label={
-                      task.completed ? 'Mark as active' : 'Mark as completed'
-                    }
-                  >
-                    {task.completed ? '✓' : '○'}
-                  </button>
-                  <span>{task.text}</span>
-                  <div className="item-actions">
-                    <button type="button" onClick={() => startEdit(task)}>
-                      Edit
-                    </button>
-                    <button type="button" onClick={() => requestDeleteTask(task.id)}>
-                      Remove
-                    </button>
-                  </div>
-                </li>
-              ),
-            )
+            filteredTasks.map((task) => (
+              <TaskItem
+                key={task.id}
+                task={task}
+                isEditing={editingId === task.id}
+                onStartEdit={startEdit}
+                onCancelEdit={cancelEdit}
+                onSaveEdit={saveEdit}
+                onToggleCompleted={toggleCompleted}
+                onDelete={requestDeleteTask}
+              />
+            ))
           )}
         </ul>
         <footer className="footer">
