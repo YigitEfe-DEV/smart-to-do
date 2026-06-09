@@ -6,7 +6,7 @@ import Composer from './components/Composer.jsx';
 import StatsGrid from './components/StatsGrid.jsx';
 import Hero from './components/Hero.jsx';
 import Toolbar from './components/Toolbar.jsx';
-import TaskItem from './components/TaskItem.jsx';
+import TaskList from './components/TaskList.jsx';
 import { computeStats, filterTasks, sortTasks } from './utils/tasks.js';
 
 export default function App() {
@@ -89,24 +89,15 @@ export default function App() {
           totalCount={tasks.length}
         />
 
-        <ul className="list">
-          {filteredTasks.length === 0 ? (
-            <li className="empty">Your workspace is clear.</li>
-          ) : (
-            filteredTasks.map((task) => (
-              <TaskItem
-                key={task.id}
-                task={task}
-                isEditing={editingId === task.id}
-                onStartEdit={startEdit}
-                onCancelEdit={cancelEdit}
-                onSaveEdit={saveEdit}
-                onToggleCompleted={toggleCompleted}
-                onDelete={requestDeleteTask}
-              />
-            ))
-          )}
-        </ul>
+        <TaskList
+          tasks={filteredTasks}
+          editingId={editingId}
+          onStartEdit={startEdit}
+          onCancelEdit={cancelEdit}
+          onSaveEdit={saveEdit}
+          onToggleCompleted={toggleCompleted}
+          onDelete={requestDeleteTask}
+        />
         <footer className="footer">
           <span>Version {APP_VERSION}</span>
         </footer>
