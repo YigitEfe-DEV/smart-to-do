@@ -7,12 +7,14 @@ import StatsGrid from './components/StatsGrid.jsx';
 import Hero from './components/Hero.jsx';
 import Toolbar from './components/Toolbar.jsx';
 import TaskList from './components/TaskList.jsx';
+import ConfirmDialog from './components/ConfirmDialog.jsx';
 import { computeStats, filterTasks, sortTasks } from './utils/tasks.js';
 
 export default function App() {
   const { tasks, addTask, editTaskText, toggleTask, deleteTask } = useTasks();
   const { theme, toggleTheme } = useTheme();
   const [editingId, setEditingId] = useState(null);
+  const [pendingDeletion, setPendingDeletion] = useState(null);
   const [filter, setFilter] = useState(FILTERS.all);
   const [search, setSearch] = useState('');
   const [sort, setSort] = useState(SORT_OPTIONS.newest);
@@ -50,11 +52,19 @@ export default function App() {
 
   const requestDeleteTask = (id) => {
     const task = tasks.find((item) => item.id === id);
-    const confirmed = window.confirm(
-      `Remove "${task?.text ?? 'this task'}"?`,
-    );
-    if (!confirmed) return;
-    deleteTask(id);
+    if (!task) return;
+    setPendingDeletion(task);
+  };
+
+  const confirmDeletion = () => {
+    if (pendingDeletion) {
+      deleteTask(pendingDeletion.id);
+    }
+    setPendingDeletion(null);
+  };
+
+  const cancelDeletion = () => {
+    setPendingDeletion(null);
   };
 
   const toggleCompleted = (id) => {
@@ -97,6 +107,20 @@ export default function App() {
           onSaveEdit={saveEdit}
           onToggleCompleted={toggleCompleted}
           onDelete={requestDeleteTask}
+        />
+        <ConfirmDialog
+          open={pendingDeletion !== null}
+          title="Remove this task?"
+          description={
+            pendingDeletion
+              ? `“${pendingDeletion.text}” will be deleted from your workspace.`
+              : ''
+          }
+          confirmLabel="Remove"
+          cancelLabel="Keep"
+          tone="danger"
+          onConfirm={confirmDeletion}
+          onCancel={cancelDeletion}
         />
         <footer className="footer">
           <span>Version {APP_VERSION}</span>
