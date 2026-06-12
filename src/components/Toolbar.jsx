@@ -9,9 +9,10 @@ export default function Toolbar({
   onSortChange,
   resultsCount,
   totalCount,
+  completedCount,
+  onClearCompleted,
 }) {
   const filterId = 'toolbar-filter-group';
-  const sortId = 'toolbar-sort-group';
 
   return (
     <div className="toolbar">
@@ -32,6 +33,7 @@ export default function Toolbar({
             className="sort-select"
             value={sort}
             onChange={(event) => onSortChange(event.target.value)}
+            aria-label="Sort tasks"
           >
             {SORT_LABELS.map((option) => (
               <option key={option.value} value={option.value}>
@@ -64,9 +66,20 @@ export default function Toolbar({
             </button>
           ))}
         </div>
-        <p className="results-summary" aria-live="polite">
-          Showing <strong>{resultsCount}</strong> of {totalCount}
-        </p>
+        <div className="toolbar-meta">
+          <p className="results-summary" aria-live="polite">
+            Showing <strong>{resultsCount}</strong> of {totalCount}
+          </p>
+          {completedCount > 0 && onClearCompleted ? (
+            <button
+              type="button"
+              className="btn-link"
+              onClick={onClearCompleted}
+            >
+              Clear completed ({completedCount})
+            </button>
+          ) : null}
+        </div>
       </div>
     </div>
   );

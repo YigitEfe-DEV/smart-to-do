@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useState } from 'react';
-import { APP_VERSION, FILTERS, SORT_OPTIONS } from './constants/app.js';
+import { APP_VERSION, FILTERS } from './constants/app.js';
 import { useTasks } from './hooks/useTasks.js';
 import { useTheme } from './hooks/useTheme.js';
+import { useSort } from './hooks/useSort.js';
 import Composer from './components/Composer.jsx';
 import StatsGrid from './components/StatsGrid.jsx';
 import Hero from './components/Hero.jsx';
@@ -11,13 +12,13 @@ import ConfirmDialog from './components/ConfirmDialog.jsx';
 import { computeStats, filterTasks, sortTasks } from './utils/tasks.js';
 
 export default function App() {
-  const { tasks, addTask, editTaskText, toggleTask, deleteTask } = useTasks();
+  const { tasks, addTask, editTaskText, toggleTask, deleteTask, clearCompleted } = useTasks();
   const { theme, toggleTheme } = useTheme();
+  const { sort, setSort } = useSort();
   const [editingId, setEditingId] = useState(null);
   const [pendingDeletion, setPendingDeletion] = useState(null);
   const [filter, setFilter] = useState(FILTERS.all);
   const [search, setSearch] = useState('');
-  const [sort, setSort] = useState(SORT_OPTIONS.newest);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -97,6 +98,8 @@ export default function App() {
           onSortChange={setSort}
           resultsCount={filteredTasks.length}
           totalCount={tasks.length}
+          completedCount={stats.completed}
+          onClearCompleted={clearCompleted}
         />
 
         <TaskList

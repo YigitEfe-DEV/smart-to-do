@@ -9,6 +9,7 @@ export const APP_VERSION = '1.2.0';
 export const STORAGE_KEYS = Object.freeze({
   tasks: 'task-manager-tasks',
   theme: 'task-manager-theme',
+  sort: 'task-manager-sort',
 });
 
 export const THEMES = Object.freeze({
