@@ -25,6 +25,7 @@ export default function Toolbar({
             onChange={(event) => onSearchChange(event.target.value)}
             placeholder="Search tasks"
             type="search"
+            aria-label="Search tasks"
           />
         </label>
         <label className="sort-field">

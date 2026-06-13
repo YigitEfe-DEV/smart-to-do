@@ -1,8 +1,9 @@
 import { useEffect, useMemo, useState } from 'react';
-import { APP_VERSION, FILTERS } from './constants/app.js';
+import { APP_VERSION, FILTERS, SEARCH_DEBOUNCE_MS } from './constants/app.js';
 import { useTasks } from './hooks/useTasks.js';
 import { useTheme } from './hooks/useTheme.js';
 import { useSort } from './hooks/useSort.js';
+import { useDebouncedValue } from './hooks/useDebouncedValue.js';
 import Composer from './components/Composer.jsx';
 import StatsGrid from './components/StatsGrid.jsx';
 import Hero from './components/Hero.jsx';
@@ -26,7 +27,8 @@ export default function App() {
     return () => window.clearTimeout(timer);
   }, []);
 
-  const normalizedSearch = search.trim().toLowerCase();
+  const debouncedSearch = useDebouncedValue(search, SEARCH_DEBOUNCE_MS);
+  const normalizedSearch = debouncedSearch.trim().toLowerCase();
 
   const filteredTasks = useMemo(() => {
     const filtered = filterTasks(tasks, { filter, normalizedSearch });
