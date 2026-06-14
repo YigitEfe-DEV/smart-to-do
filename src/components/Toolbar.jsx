@@ -1,4 +1,5 @@
 import { FILTER_TABS, SORT_LABELS } from '../constants/app.js';
+import { useRovingTabIndex } from '../hooks/useRovingTabIndex.js';
 
 export default function Toolbar({
   search,
@@ -13,6 +14,7 @@ export default function Toolbar({
   onClearCompleted,
 }) {
   const filterId = 'toolbar-filter-group';
+  const { onKeyDown, getTabIndex, setRef } = useRovingTabIndex(FILTER_TABS.length);
 
   return (
     <div className="toolbar">
@@ -51,21 +53,25 @@ export default function Toolbar({
           className="filters"
           role="tablist"
           aria-label="Task filters"
+          onKeyDown={onKeyDown}
         >
-          {FILTER_TABS.map((tab) => (
-            <button
-              key={tab.value}
-              type="button"
-              role="tab"
-              aria-selected={filter === tab.value}
-              className={
-                filter === tab.value ? 'filter filter--active' : 'filter'
-              }
-              onClick={() => onFilterChange(tab.value)}
-            >
-              {tab.label}
-            </button>
-          ))}
+          {FILTER_TABS.map((tab, index) => {
+            const isActive = filter === tab.value;
+            return (
+              <button
+                key={tab.value}
+                ref={setRef(index)}
+                type="button"
+                role="tab"
+                aria-selected={isActive}
+                tabIndex={getTabIndex(index)}
+                className={isActive ? 'filter filter--active' : 'filter'}
+                onClick={() => onFilterChange(tab.value)}
+              >
+                {tab.label}
+              </button>
+            );
+          })}
         </div>
         <div className="toolbar-meta">
           <p className="results-summary" aria-live="polite">
