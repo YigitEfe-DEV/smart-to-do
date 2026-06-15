@@ -18,12 +18,23 @@ function sanitizeTaskText(value) {
   return String(value ?? '').replace(/\s+/g, ' ').trim();
 }
 
+/**
+ * Hydrates tasks from localStorage on first paint and exposes mutation
+ * helpers. The `isHydrated` flag lets callers defer UI work that depends
+ * on the actual task list until storage has been read.
+ */
 export function useTasks() {
   const [tasks, setTasks] = useState(() => readJSON(STORAGE_KEYS.tasks, []));
+  const [isHydrated, setIsHydrated] = useState(false);
 
   useEffect(() => {
+    setIsHydrated(true);
+  }, []);
+
+  useEffect(() => {
+    if (!isHydrated) return;
     writeJSON(STORAGE_KEYS.tasks, tasks);
-  }, [tasks]);
+  }, [tasks, isHydrated]);
 
   const addTask = useCallback((rawText) => {
     const text = sanitizeTaskText(rawText);
@@ -69,6 +80,7 @@ export function useTasks() {
 
   return {
     tasks,
+    isHydrated,
     addTask,
     updateTask,
     editTaskText,

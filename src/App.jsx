@@ -1,5 +1,10 @@
 import { useEffect, useMemo, useState } from 'react';
-import { APP_VERSION, FILTERS, SEARCH_DEBOUNCE_MS } from './constants/app.js';
+import {
+  APP_VERSION,
+  FILTERS,
+  LOADING_MIN_DURATION_MS,
+  SEARCH_DEBOUNCE_MS,
+} from './constants/app.js';
 import { useTasks } from './hooks/useTasks.js';
 import { useTheme } from './hooks/useTheme.js';
 import { useSort } from './hooks/useSort.js';
@@ -13,19 +18,24 @@ import ConfirmDialog from './components/ConfirmDialog.jsx';
 import { computeStats, filterTasks, sortTasks } from './utils/tasks.js';
 
 export default function App() {
-  const { tasks, addTask, editTaskText, toggleTask, deleteTask, clearCompleted } = useTasks();
+  const { tasks, isHydrated, addTask, editTaskText, toggleTask, deleteTask, clearCompleted } = useTasks();
   const { theme, toggleTheme } = useTheme();
   const { sort, setSort } = useSort();
   const [editingId, setEditingId] = useState(null);
   const [pendingDeletion, setPendingDeletion] = useState(null);
   const [filter, setFilter] = useState(FILTERS.all);
   const [search, setSearch] = useState('');
-  const [isLoading, setIsLoading] = useState(true);
+  const [hasMinDurationPassed, setHasMinDurationPassed] = useState(false);
 
   useEffect(() => {
-    const timer = window.setTimeout(() => setIsLoading(false), 900);
+    const timer = window.setTimeout(
+      () => setHasMinDurationPassed(true),
+      LOADING_MIN_DURATION_MS,
+    );
     return () => window.clearTimeout(timer);
   }, []);
+
+  const isLoading = !(isHydrated && hasMinDurationPassed);
 
   const debouncedSearch = useDebouncedValue(search, SEARCH_DEBOUNCE_MS);
   const normalizedSearch = debouncedSearch.trim().toLowerCase();
