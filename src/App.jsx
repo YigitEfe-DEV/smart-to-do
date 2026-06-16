@@ -116,12 +116,16 @@ export default function App() {
 
         <TaskList
           tasks={filteredTasks}
+          hasAnyTask={tasks.length > 0}
+          hasActiveQuery={normalizedSearch.length > 0}
+          filter={filter}
           editingId={editingId}
           onStartEdit={startEdit}
           onCancelEdit={cancelEdit}
           onSaveEdit={saveEdit}
           onToggleCompleted={toggleCompleted}
           onDelete={requestDeleteTask}
+          onClearSearch={() => setSearch('')}
         />
         <ConfirmDialog
           open={pendingDeletion !== null}
