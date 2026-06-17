@@ -15,6 +15,7 @@ import Hero from './components/Hero.jsx';
 import Toolbar from './components/Toolbar.jsx';
 import TaskList from './components/TaskList.jsx';
 import ConfirmDialog from './components/ConfirmDialog.jsx';
+import Toast from './components/Toast.jsx';
 import { computeStats, filterTasks, sortTasks } from './utils/tasks.js';
 
 export default function App() {
@@ -141,6 +142,7 @@ export default function App() {
           onConfirm={confirmDeletion}
           onCancel={cancelDeletion}
         />
+        <Toast />
         <footer className="footer">
           <span>Version {APP_VERSION}</span>
         </footer>
