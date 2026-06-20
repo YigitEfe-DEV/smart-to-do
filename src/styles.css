@@ -369,6 +369,16 @@ h1 {
   .filter {
     flex: 1 1 0;
     text-align: center;
+    min-height: 44px;
+  }
+
+  .item .check {
+    width: 44px;
+    height: 44px;
+  }
+
+  .item-actions button {
+    min-height: 44px;
   }
 
   .dialog {
