@@ -294,6 +294,30 @@ h1 {
   font-size: 0.9rem;
 }
 
+@media (min-width: 1100px) {
+  .panel {
+    width: min(880px, 100%);
+    padding: 34px;
+  }
+
+  .hero {
+    margin-bottom: 24px;
+  }
+
+  .composer {
+    margin: 24px 0 18px;
+  }
+
+  .stats-grid {
+    gap: 14px;
+    margin-bottom: 22px;
+  }
+
+  .list {
+    gap: 14px;
+  }
+}
+
 @media (max-width: 1024px) {
   .panel {
     width: min(720px, 100%);
