@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import Button from './Button.jsx';
 
 /**
  * Modal confirm dialog with focus trap and Escape support.
@@ -65,17 +66,16 @@ export default function ConfirmDialog({
         <h2 id="dialog-title" className="dialog-title">{title}</h2>
         <p id="dialog-description" className="dialog-description">{description}</p>
         <div className="dialog-actions">
-          <button type="button" className="btn-ghost" onClick={onCancel}>
+          <Button variant="ghost" onClick={onCancel}>
             {cancelLabel}
-          </button>
-          <button
+          </Button>
+          <Button
             ref={confirmRef}
-            type="button"
-            className={tone === 'danger' ? 'btn-danger-solid' : 'btn-primary'}
+            variant={tone === 'danger' ? 'danger-solid' : 'primary'}
             onClick={onConfirm}
           >
             {confirmLabel}
-          </button>
+          </Button>
         </div>
       </div>
     </div>

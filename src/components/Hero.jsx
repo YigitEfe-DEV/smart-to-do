@@ -1,3 +1,5 @@
+import Button from './Button.jsx';
+
 export default function Hero({ theme, onToggleTheme }) {
   const isDark = theme === 'dark';
   return (
@@ -9,9 +11,10 @@ export default function Hero({ theme, onToggleTheme }) {
           A focused task workspace with a clean, adaptive interface.
         </p>
       </div>
-      <button
+      <Button
+        variant="ghost"
+        size="sm"
         className="theme-toggle"
-        type="button"
         onClick={onToggleTheme}
         aria-pressed={!isDark}
         aria-label={isDark ? 'Switch to light theme' : 'Switch to dark theme'}
@@ -20,7 +23,7 @@ export default function Hero({ theme, onToggleTheme }) {
           {isDark ? '☀' : '☾'}
         </span>
         <span>{isDark ? 'Light' : 'Dark'}</span>
-      </button>
+      </Button>
     </div>
   );
 }
