@@ -1,16 +1,57 @@
 :root {
+  --color-bg-from: #312e81;
+  --color-bg-mid: #0f172a;
+  --color-bg-to: #020617;
+  --color-surface: #e2e8f0;
+  --color-on-surface: #0f172a;
+  --color-accent: #38bdf8;
+  --color-accent-strong: #082f49;
+  --color-danger: #fb7185;
+  --color-danger-strong: #881337;
+  --color-muted: color-mix(in srgb, Canvas 84%, transparent);
+  --color-border: color-mix(in srgb, currentColor 14%, transparent);
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-7: 28px;
+  --space-8: 32px;
+
+  --radius-sm: 10px;
+  --radius-md: 14px;
+  --radius-lg: 18px;
+  --radius-xl: 24px;
+  --radius-2xl: 30px;
+  --radius-pill: 999px;
+
+  --shadow-md: 0 18px 50px rgba(2, 6, 23, 0.15);
+  --shadow-lg: 0 28px 90px rgba(2, 6, 23, 0.3);
+
+  --transition-fast: 120ms ease;
+  --transition-medium: 220ms ease;
+  --transition-slow: 360ms cubic-bezier(0.22, 1, 0.36, 1);
+
   color-scheme: dark;
   font-family: Inter, system-ui, sans-serif;
   background:
-    radial-gradient(circle at top, #312e81 0, #0f172a 38%, #020617 100%);
-  color: #e2e8f0;
+    radial-gradient(circle at top, var(--color-bg-from) 0, var(--color-bg-mid) 38%, var(--color-bg-to) 100%);
+  color: var(--color-surface);
 }
 
 :root[data-theme="light"] {
+  --color-bg-from: #dbeafe;
+  --color-bg-mid: #f8fafc;
+  --color-bg-to: #e2e8f0;
+  --color-surface: #0f172a;
+  --color-muted: color-mix(in srgb, Canvas 92%, transparent);
+  --color-border: color-mix(in srgb, currentColor 12%, transparent);
   color-scheme: light;
   background:
-    radial-gradient(circle at top, #dbeafe 0, #f8fafc 46%, #e2e8f0 100%);
-  color: #0f172a;
+    radial-gradient(circle at top, var(--color-bg-from) 0, var(--color-bg-mid) 46%, var(--color-bg-to) 100%);
+  color: var(--color-surface);
 }
 
 * {
@@ -31,19 +72,19 @@ input {
   min-height: 100vh;
   display: grid;
   place-items: center;
-  padding: 24px;
+  padding: var(--space-6);
 }
 
 .panel {
   position: relative;
   width: min(760px, 100%);
-  border-radius: 30px;
-  padding: 28px;
+  border-radius: var(--radius-2xl);
+  padding: var(--space-7);
   background:
     linear-gradient(180deg, color-mix(in srgb, Canvas 86%, transparent), color-mix(in srgb, Canvas 72%, transparent));
   border: 1px solid color-mix(in srgb, currentColor 14%, transparent);
   backdrop-filter: blur(18px);
-  box-shadow: 0 28px 90px rgba(2, 6, 23, 0.3);
+  box-shadow: var(--shadow-lg);
   overflow: hidden;
 }
 
