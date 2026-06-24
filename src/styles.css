@@ -133,10 +133,16 @@ h1 {
 }
 
 .stat-card {
-  border-radius: 18px;
-  padding: 16px;
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
   background: color-mix(in srgb, Canvas 84%, transparent);
   border: 1px solid color-mix(in srgb, currentColor 12%, transparent);
+  transition: transform var(--transition-medium), border-color var(--transition-medium);
+}
+
+.stat-card:hover {
+  transform: translateY(-2px);
+  border-color: color-mix(in srgb, var(--color-accent) 40%, transparent);
 }
 
 .stat-card span {
@@ -240,11 +246,12 @@ h1 {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
-  padding: 16px;
-  border-radius: 18px;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  border-radius: var(--radius-lg);
   background: color-mix(in srgb, Canvas 82%, transparent);
   border: 1px solid color-mix(in srgb, currentColor 12%, transparent);
+  animation: item-rise var(--transition-slow);
 }
 
 .item.completed {
@@ -258,6 +265,14 @@ h1 {
 .item.editing {
   flex-direction: column;
   align-items: stretch;
+}
+
+.item .check {
+  transition: transform var(--transition-fast), background var(--transition-medium);
+}
+
+.item .check:hover {
+  transform: scale(1.05);
 }
 
 .edit-form {
@@ -465,4 +480,39 @@ h1 {
   to {
     transform: rotate(360deg);
   }
+}
+
+@keyframes item-rise {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes dialog-pop {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.dialog-backdrop {
+  animation: fade-in var(--transition-medium);
+}
+
+.dialog {
+  animation: dialog-pop var(--transition-slow);
 }
