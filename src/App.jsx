@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   APP_VERSION,
   FILTERS,
@@ -16,7 +16,7 @@ import Toolbar from './components/Toolbar.jsx';
 import TaskList from './components/TaskList.jsx';
 import ConfirmDialog from './components/ConfirmDialog.jsx';
 import Toast from './components/Toast.jsx';
-import { computeStats, filterTasks, sortTasks } from './utils/tasks.js';
+import { computeStats, filterTasks, indexTasksById, sortTasks } from './utils/tasks.js';
 
 export default function App() {
   const { tasks, isHydrated, addTask, editTaskText, toggleTask, deleteTask, clearCompleted } = useTasks();
@@ -41,6 +41,8 @@ export default function App() {
   const debouncedSearch = useDebouncedValue(search, SEARCH_DEBOUNCE_MS);
   const normalizedSearch = debouncedSearch.trim().toLowerCase();
 
+  const taskLookup = useMemo(() => indexTasksById(tasks), [tasks]);
+
   const filteredTasks = useMemo(() => {
     const filtered = filterTasks(tasks, { filter, normalizedSearch });
     return sortTasks(filtered, sort);
@@ -48,42 +50,53 @@ export default function App() {
 
   const stats = useMemo(() => computeStats(tasks), [tasks]);
 
-  const addTaskHandler = (text) => addTask(text);
+  const addTaskHandler = useCallback((text) => addTask(text), [addTask]);
 
-  const startEdit = (task) => {
+  const startEdit = useCallback((task) => {
     setEditingId(task.id);
-  };
+  }, []);
 
-  const cancelEdit = () => {
+  const cancelEdit = useCallback(() => {
     setEditingId(null);
-  };
+  }, []);
 
-  const saveEdit = (id, text) => {
-    if (editTaskText(id, text)) {
-      cancelEdit();
-    }
-  };
+  const saveEdit = useCallback(
+    (id, text) => {
+      if (editTaskText(id, text)) {
+        cancelEdit();
+      }
+    },
+    [editTaskText, cancelEdit],
+  );
 
-  const requestDeleteTask = (id) => {
-    const task = tasks.find((item) => item.id === id);
-    if (!task) return;
-    setPendingDeletion(task);
-  };
+  const requestDeleteTask = useCallback(
+    (id) => {
+      const task = taskLookup.get(id);
+      if (!task) return;
+      setPendingDeletion(task);
+    },
+    [taskLookup],
+  );
 
-  const confirmDeletion = () => {
+  const confirmDeletion = useCallback(() => {
     if (pendingDeletion) {
       deleteTask(pendingDeletion.id);
     }
     setPendingDeletion(null);
-  };
+  }, [pendingDeletion, deleteTask]);
 
-  const cancelDeletion = () => {
+  const cancelDeletion = useCallback(() => {
     setPendingDeletion(null);
-  };
+  }, []);
 
-  const toggleCompleted = (id) => {
-    toggleTask(id);
-  };
+  const toggleCompleted = useCallback(
+    (id) => {
+      toggleTask(id);
+    },
+    [toggleTask],
+  );
+
+  const clearSearch = useCallback(() => setSearch(''), []);
 
   return (
     <main className="page">
@@ -126,7 +139,7 @@ export default function App() {
           onSaveEdit={saveEdit}
           onToggleCompleted={toggleCompleted}
           onDelete={requestDeleteTask}
-          onClearSearch={() => setSearch('')}
+          onClearSearch={clearSearch}
         />
         <ConfirmDialog
           open={pendingDeletion !== null}

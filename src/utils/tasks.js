@@ -59,9 +59,23 @@ export function sortTasks(tasks, sort) {
  * Compute aggregate stats for a task list.
  */
 export function computeStats(tasks) {
+  let completed = 0;
+  for (const task of tasks) {
+    if (task.completed) completed += 1;
+  }
   const total = tasks.length;
-  const completed = tasks.reduce((count, task) => count + (task.completed ? 1 : 0), 0);
   const pending = total - completed;
   const ratio = total === 0 ? 0 : Math.round((completed / total) * 100);
   return { total, completed, pending, ratio };
+}
+
+/**
+ * Index a task list by id for O(1) lookups.
+ */
+export function indexTasksById(tasks) {
+  const map = new Map();
+  for (const task of tasks) {
+    map.set(task.id, task);
+  }
+  return map;
 }
