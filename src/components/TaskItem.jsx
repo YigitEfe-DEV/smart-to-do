@@ -26,6 +26,18 @@ export default function TaskItem({
     return undefined;
   }, [isEditing, task.text]);
 
+  useEffect(() => {
+    if (!isEditing) return undefined;
+    const handler = (event) => {
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        onCancelEdit();
+      }
+    };
+    window.addEventListener('keydown', handler);
+    return () => window.removeEventListener('keydown', handler);
+  }, [isEditing, onCancelEdit]);
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const cleaned = sanitizeTaskText(draft);
@@ -44,6 +56,7 @@ export default function TaskItem({
             onChange={(event) => setDraft(event.target.value)}
             aria-label="Edit task"
             aria-invalid={tooLong}
+            maxLength={TASK_LIMITS.maxLength + 32}
           />
           <div className="item-actions">
             <button type="submit" disabled={!draft.trim() || tooLong}>
@@ -83,6 +96,7 @@ export default function TaskItem({
           type="button"
           className="btn-danger"
           onClick={() => onDelete(task.id)}
+          aria-label={`Remove ${task.text}`}
         >
           Remove
         </button>
